@@ -7,6 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		371D7AFC2902B1CD00F63F1C /* ApiError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 371D7AF52902B1CD00F63F1C /* ApiError.swift */; };
+		371D7AFD2902B1CD00F63F1C /* KeychainHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 371D7AF62902B1CD00F63F1C /* KeychainHelper.swift */; };
+		371D7AFE2902B1CD00F63F1C /* InfomaniakLogin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 371D7AF72902B1CD00F63F1C /* InfomaniakLogin.swift */; };
+		371D7AFF2902B1CD00F63F1C /* InfomaniakLoginError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 371D7AF82902B1CD00F63F1C /* InfomaniakLoginError.swift */; };
+		371D7B002902B1CD00F63F1C /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 371D7AF92902B1CD00F63F1C /* WebViewController.swift */; };
+		371D7B012902B1CD00F63F1C /* DeleteAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 371D7AFA2902B1CD00F63F1C /* DeleteAccountViewController.swift */; };
+		371D7B022902B1CD00F63F1C /* ApiToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = 371D7AFB2902B1CD00F63F1C /* ApiToken.swift */; };
 		4914851325B20EB200DBD8FF /* Session+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4914851225B20EB200DBD8FF /* Session+Extensions.swift */; };
 		4914851625B20EEF00DBD8FF /* URL+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4914851525B20EEF00DBD8FF /* URL+Extensions.swift */; };
 		4981CFAC262F363000958EE8 /* RuntimeRetryPolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4981CFAB262F363000958EE8 /* RuntimeRetryPolicy.swift */; };
@@ -42,6 +49,13 @@
 
 /* Begin PBXFileReference section */
 		134814201AA4EA6300B7C361 /* libNetworkClient.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libNetworkClient.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		371D7AF52902B1CD00F63F1C /* ApiError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApiError.swift; sourceTree = "<group>"; };
+		371D7AF62902B1CD00F63F1C /* KeychainHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainHelper.swift; sourceTree = "<group>"; };
+		371D7AF72902B1CD00F63F1C /* InfomaniakLogin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InfomaniakLogin.swift; sourceTree = "<group>"; };
+		371D7AF82902B1CD00F63F1C /* InfomaniakLoginError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InfomaniakLoginError.swift; sourceTree = "<group>"; };
+		371D7AF92902B1CD00F63F1C /* WebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
+		371D7AFA2902B1CD00F63F1C /* DeleteAccountViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeleteAccountViewController.swift; sourceTree = "<group>"; };
+		371D7AFB2902B1CD00F63F1C /* ApiToken.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApiToken.swift; sourceTree = "<group>"; };
 		4914851225B20EB200DBD8FF /* Session+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Session+Extensions.swift"; sourceTree = "<group>"; };
 		4914851525B20EEF00DBD8FF /* URL+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+Extensions.swift"; sourceTree = "<group>"; };
 		4981CFAB262F363000958EE8 /* RuntimeRetryPolicy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RuntimeRetryPolicy.swift; sourceTree = "<group>"; };
@@ -83,9 +97,24 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		371D7AF42902B1CD00F63F1C /* InfomaniakLogin */ = {
+			isa = PBXGroup;
+			children = (
+				371D7AF52902B1CD00F63F1C /* ApiError.swift */,
+				371D7AF62902B1CD00F63F1C /* KeychainHelper.swift */,
+				371D7AF72902B1CD00F63F1C /* InfomaniakLogin.swift */,
+				371D7AF82902B1CD00F63F1C /* InfomaniakLoginError.swift */,
+				371D7AF92902B1CD00F63F1C /* WebViewController.swift */,
+				371D7AFA2902B1CD00F63F1C /* DeleteAccountViewController.swift */,
+				371D7AFB2902B1CD00F63F1C /* ApiToken.swift */,
+			);
+			path = InfomaniakLogin;
+			sourceTree = "<group>";
+		};
 		58B511D21A9E6C8500147676 = {
 			isa = PBXGroup;
 			children = (
+				371D7AF42902B1CD00F63F1C /* InfomaniakLogin */,
 				4981D12A26332E3200958EE8 /* URLRequest+Extensions.swift */,
 				4981CFAB262F363000958EE8 /* RuntimeRetryPolicy.swift */,
 				49AC517C2605372D009CABD5 /* StringProtocol+Extensions.swift */,
@@ -171,8 +200,11 @@
 				4983339725B68D0C00C9CB2B /* WebSocketClient.swift in Sources */,
 				4983339425B68CFF00C9CB2B /* WebSocketClient.m in Sources */,
 				49AC517D2605372D009CABD5 /* StringProtocol+Extensions.swift in Sources */,
+				371D7AFD2902B1CD00F63F1C /* KeychainHelper.swift in Sources */,
+				371D7B012902B1CD00F63F1C /* DeleteAccountViewController.swift in Sources */,
 				49917982255A0D8900C32F78 /* GenericClient.swift in Sources */,
 				49EBD8172575CF6500C7C102 /* NetworkClient.swift in Sources */,
+				371D7B002902B1CD00F63F1C /* WebViewController.swift in Sources */,
 				49EBDB3625781FA200C7C102 /* BearerAuthenticationAdapter.swift in Sources */,
 				49EE97C025F9A0B000DDF63F /* ExponentialRetryPolicy.swift in Sources */,
 				4991797E255A0D0600C32F78 /* GenericClient.m in Sources */,
@@ -180,8 +212,12 @@
 				53A730F6250AA8E40058A8B4 /* SessionManager.swift in Sources */,
 				4914851325B20EB200DBD8FF /* Session+Extensions.swift in Sources */,
 				4981D12B26332E3200958EE8 /* URLRequest+Extensions.swift in Sources */,
+				371D7B022902B1CD00F63F1C /* ApiToken.swift in Sources */,
+				371D7AFC2902B1CD00F63F1C /* ApiError.swift in Sources */,
 				49D5A781261E6C990004BB3A /* SessionManager+Extensions.swift in Sources */,
+				371D7AFE2902B1CD00F63F1C /* InfomaniakLogin.swift in Sources */,
 				49EE973E25F95F6700DDF63F /* LinearRetryPolicy.swift in Sources */,
+				371D7AFF2902B1CD00F63F1C /* InfomaniakLoginError.swift in Sources */,
 				F4FF95D7245B92E800C19C63 /* APIClient.swift in Sources */,
 				49FE4ECC252E839900EC2942 /* APIClient.m in Sources */,
 				49EFF88725B75B510098B42C /* WebSocketManager.swift in Sources */,

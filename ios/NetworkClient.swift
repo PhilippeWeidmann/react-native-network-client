@@ -87,6 +87,10 @@ extension NetworkClient {
                                          withResolver resolve: @escaping RCTPromiseResolveBlock,
                                          withRejecter reject: @escaping RCTPromiseRejectBlock) -> Void {
         data.request?.removeRetryPolicy()
+        var responseHeaders = data.response?.allHeaderFields ?? [:]
+        if let authorizationHeader = request?.request?.allHTTPHeaderFields?["Authorization"] {
+            responseHeaders["token"] = authorizationHeader
+        }
         
         switch (data.result) {
         case .success:
@@ -97,7 +101,7 @@ extension NetworkClient {
             
             var response: [String: Any] = [
                 "ok": ok,
-                "headers": data.response?.allHeaderFields as Any,
+                "headers": responseHeaders as Any,
                 "data": ["path": data.fileURL?.absoluteString as Any],
                 "code": data.response?.statusCode as Any,
             ]
@@ -116,7 +120,7 @@ extension NetworkClient {
             
             var response: [String: Any] = [
                 "ok": false,
-                "headers": data.response?.allHeaderFields as Any,
+                "headers": responseHeaders as Any,
                 "code": responseCode as Any,
                 "retriesExhausted": retriesExhausted
             ]
@@ -136,9 +140,12 @@ extension NetworkClient {
     func resolveOrRejectJSONResponse(_ json: AFDataResponse<Any>,
                                      for request: Request? = nil,
                                      withResolver resolve: @escaping RCTPromiseResolveBlock,
-                                     withRejecter reject: @escaping RCTPromiseRejectBlock) -> Void {
-
+                                     withRejecter reject: @escaping RCTPromiseRejectBlock) {
         json.request?.removeRetryPolicy()
+        var responseHeaders = json.response?.allHeaderFields ?? [:]
+        if let authorizationHeader = request?.request?.allHTTPHeaderFields?["Authorization"] {
+            responseHeaders["token"] = authorizationHeader
+        }
         
         switch (json.result) {
         case .success:
@@ -149,7 +156,7 @@ extension NetworkClient {
 
             var response = [
                 "ok": ok,
-                "headers": json.response?.allHeaderFields,
+                "headers": responseHeaders,
                 "data": json.value,
                 "code": json.response?.statusCode,
             ]
@@ -168,7 +175,7 @@ extension NetworkClient {
             
             var response = [
                 "ok": false,
-                "headers": json.response?.allHeaderFields,
+                "headers": responseHeaders,
                 "data": json.value,
                 "code": responseCode,
                 "retriesExhausted": retriesExhausted
@@ -194,17 +201,34 @@ extension NetworkClient {
 
     func getSessionInterceptor(from options: JSON) -> Interceptor? {
         let retriers = [RuntimeRetrier()]
-
+        var interceptors = [RequestInterceptor]()
         var adapters = [RequestAdapter]()
-        if let _ = options["requestAdapterConfiguration"]["bearerAuthTokenResponseHeader"].string {
-            adapters.append(BearerAuthenticationAdapter())
+        
+        let apiTokenJson = options["sessionConfiguration"]["apiToken"].string
+        let shouldRetrieveToken = options["sessionConfiguration"]["shouldRetrieveToken"].boolValue
+        
+        let jsonDecoder = JSONDecoder()
+        jsonDecoder.dateDecodingStrategy = .millisecondsSince1970
+        
+        var apiToken: ApiToken?
+        if let tokenData = apiTokenJson?.data(using: .utf8),
+           let jsApiToken = try? JSONDecoder().decode(ApiToken.self, from: tokenData) {
+            KeychainHelper.storeToken(jsApiToken)
+            apiToken = jsApiToken
+            print("Token loaded from JS")
+        } else if shouldRetrieveToken,
+                  let savedApiToken = KeychainHelper.getSavedToken() {
+            apiToken = savedApiToken
+            print("Token loaded from Keychain")
+        } else {
+            print("No token")
         }
-
-        if (adapters.isEmpty) {
-            return Interceptor(retriers: retriers)
+        
+        if let apiToken = apiToken {
+            interceptors.append(AuthenticationInterceptor(authenticator: OAuthAuthenticator(), credential: apiToken))
         }
     
-        return Interceptor(adapters: adapters, retriers: retriers)
+        return Interceptor(adapters: adapters, retriers: retriers, interceptors: interceptors)
     }
     
     func getRetryPolicy(from options: JSON, forRequest request: URLRequest? = nil) -> RetryPolicy? {
