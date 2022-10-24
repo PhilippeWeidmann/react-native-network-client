@@ -15,9 +15,16 @@ class OAuthAuthenticator: Authenticator {
     }
     
     open func refresh(_ credential: Credential, for session: Session, completion: @escaping (Result<Credential, Error>) -> Void) {
+        if let token = KeychainHelper.getSavedToken(),
+           token.expirationDate > credential.expirationDate {
+            completion(.success(token))
+            return
+        }
+        
         InfomaniakLogin.refreshToken(token: credential) { token, error in
             // New token has been fetched correctly
             if let token = token {
+                KeychainHelper.storeToken(token)
                 completion(.success(token))
             } else {
                 // Couldn't refresh the token, API says it's invalid

@@ -14,6 +14,7 @@
 		371D7B002902B1CD00F63F1C /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 371D7AF92902B1CD00F63F1C /* WebViewController.swift */; };
 		371D7B012902B1CD00F63F1C /* DeleteAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 371D7AFA2902B1CD00F63F1C /* DeleteAccountViewController.swift */; };
 		371D7B022902B1CD00F63F1C /* ApiToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = 371D7AFB2902B1CD00F63F1C /* ApiToken.swift */; };
+		371D7B2A2906CDAB00F63F1C /* OAuthAuthenticator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 371D7B292906CDAB00F63F1C /* OAuthAuthenticator.swift */; };
 		4914851325B20EB200DBD8FF /* Session+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4914851225B20EB200DBD8FF /* Session+Extensions.swift */; };
 		4914851625B20EEF00DBD8FF /* URL+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4914851525B20EEF00DBD8FF /* URL+Extensions.swift */; };
 		4981CFAC262F363000958EE8 /* RuntimeRetryPolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4981CFAB262F363000958EE8 /* RuntimeRetryPolicy.swift */; };
@@ -56,6 +57,7 @@
 		371D7AF92902B1CD00F63F1C /* WebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
 		371D7AFA2902B1CD00F63F1C /* DeleteAccountViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeleteAccountViewController.swift; sourceTree = "<group>"; };
 		371D7AFB2902B1CD00F63F1C /* ApiToken.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApiToken.swift; sourceTree = "<group>"; };
+		371D7B292906CDAB00F63F1C /* OAuthAuthenticator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuthAuthenticator.swift; sourceTree = "<group>"; };
 		4914851225B20EB200DBD8FF /* Session+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Session+Extensions.swift"; sourceTree = "<group>"; };
 		4914851525B20EEF00DBD8FF /* URL+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+Extensions.swift"; sourceTree = "<group>"; };
 		4981CFAB262F363000958EE8 /* RuntimeRetryPolicy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RuntimeRetryPolicy.swift; sourceTree = "<group>"; };
@@ -103,6 +105,7 @@
 				371D7AF52902B1CD00F63F1C /* ApiError.swift */,
 				371D7AF62902B1CD00F63F1C /* KeychainHelper.swift */,
 				371D7AF72902B1CD00F63F1C /* InfomaniakLogin.swift */,
+				371D7B292906CDAB00F63F1C /* OAuthAuthenticator.swift */,
 				371D7AF82902B1CD00F63F1C /* InfomaniakLoginError.swift */,
 				371D7AF92902B1CD00F63F1C /* WebViewController.swift */,
 				371D7AFA2902B1CD00F63F1C /* DeleteAccountViewController.swift */,
@@ -216,6 +219,7 @@
 				371D7AFC2902B1CD00F63F1C /* ApiError.swift in Sources */,
 				49D5A781261E6C990004BB3A /* SessionManager+Extensions.swift in Sources */,
 				371D7AFE2902B1CD00F63F1C /* InfomaniakLogin.swift in Sources */,
+				371D7B2A2906CDAB00F63F1C /* OAuthAuthenticator.swift in Sources */,
 				49EE973E25F95F6700DDF63F /* LinearRetryPolicy.swift in Sources */,
 				371D7AFF2902B1CD00F63F1C /* InfomaniakLoginError.swift in Sources */,
 				F4FF95D7245B92E800C19C63 /* APIClient.swift in Sources */,
