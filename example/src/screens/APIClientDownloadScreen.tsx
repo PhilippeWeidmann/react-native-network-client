@@ -13,7 +13,7 @@ import type {
     ClientResponseError,
     ProgressPromise,
     RequestOptions,
-} from "@mattermost/react-native-network-client";
+} from "@philippeweidmann/react-native-network-client";
 
 type DownloadState = {
     request?: ProgressPromise<ClientResponse>;

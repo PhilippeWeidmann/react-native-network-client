@@ -4,14 +4,14 @@
 import React, { useEffect, useState } from "react";
 import { View } from "react-native";
 import { ButtonGroup, CheckBox, Input } from "react-native-elements";
-import { Constants } from "@mattermost/react-native-network-client";
+import { Constants } from "@philippeweidmann/react-native-network-client";
 
 import NumericInput from "./NumericInput";
 
 import type {
     RetryPolicyConfiguration as RetryPolicyConfigurationType,
     RetryTypes,
-} from "@mattermost/react-native-network-client";
+} from "@philippeweidmann/react-native-network-client";
 
 interface RetryPolicyConfigurationProps extends RetryPolicyConfigurationType {
     policyType?: RetryTypes;

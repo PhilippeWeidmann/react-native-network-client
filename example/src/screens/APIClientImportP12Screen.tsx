@@ -8,7 +8,7 @@ import { Button } from "react-native-elements";
 import P12Inputs from "../components/P12Inputs";
 import { useClientP12Configuration } from "../hooks";
 
-import type { ClientResponseError } from "@mattermost/react-native-network-client";
+import type { ClientResponseError } from "@philippeweidmann/react-native-network-client";
 
 const styles = StyleSheet.create({
     importButton: { padding: 10 },

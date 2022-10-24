@@ -9,7 +9,7 @@ import type {
     RetryTypes,
     RequestOptions,
     UploadRequestOptions,
-} from "@mattermost/react-native-network-client";
+} from "@philippeweidmann/react-native-network-client";
 
 const { APIClient: NativeAPIClient } = NativeModules;
 const { RETRY_TYPES } = NativeAPIClient.getConstants();

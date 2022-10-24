@@ -5,7 +5,7 @@ import type {
     APIClientInterface,
     GenericClientInterface,
     WebSocketClientInterface,
-} from "@mattermost/react-native-network-client";
+} from "@philippeweidmann/react-native-network-client";
 
 enum ClientType {
     GENERIC,

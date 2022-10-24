@@ -8,7 +8,7 @@ import { Input, Button } from "react-native-elements";
 import ListHeaders from "../components/ListHeaders";
 import { METHODS } from "../utils";
 
-import type { ClientHeaders } from "@mattermost/react-native-network-client";
+import type { ClientHeaders } from "@philippeweidmann/react-native-network-client";
 
 export default function APIClientScreen({
     navigation,

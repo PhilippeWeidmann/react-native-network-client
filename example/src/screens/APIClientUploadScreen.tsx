@@ -15,7 +15,7 @@ import type {
     ClientResponseError,
     ProgressPromise,
     UploadRequestOptions,
-} from "@mattermost/react-native-network-client";
+} from "@philippeweidmann/react-native-network-client";
 
 type UploadState = {
     request?: ProgressPromise<ClientResponse>;

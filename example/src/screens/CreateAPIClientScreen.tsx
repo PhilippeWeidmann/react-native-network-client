@@ -5,7 +5,7 @@ import React, { useState } from "react";
 import { Alert, SafeAreaView, ScrollView, StyleSheet } from "react-native";
 import { Button, CheckBox, Input } from "react-native-elements";
 
-import { getOrCreateAPIClient } from "@mattermost/react-native-network-client";
+import { getOrCreateAPIClient } from "@philippeweidmann/react-native-network-client";
 
 import AddHeaders from "../components/AddHeaders";
 import P12Inputs from "../components/P12Inputs";
@@ -21,7 +21,7 @@ import { ClientType, parseHeaders, apiClientErrorEventHandler } from "../utils";
 import type {
     APIClientConfiguration,
     RequestAdapterConfiguration,
-} from "@mattermost/react-native-network-client";
+} from "@philippeweidmann/react-native-network-client";
 
 const styles = StyleSheet.create({
     checkboxText: { flex: 1 },

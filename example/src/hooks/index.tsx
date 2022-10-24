@@ -8,7 +8,7 @@ import type {
     RetryPolicyConfiguration,
     RetryTypes,
     SessionConfiguration,
-} from "@mattermost/react-native-network-client";
+} from "@philippeweidmann/react-native-network-client";
 
 type UseSessionConfigurationResponse = [
     SessionConfiguration,

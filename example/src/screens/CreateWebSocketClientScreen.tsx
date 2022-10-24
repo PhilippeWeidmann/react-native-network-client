@@ -5,7 +5,7 @@ import React, { useState } from "react";
 import { Alert, SafeAreaView, ScrollView, StyleSheet } from "react-native";
 import { Button, CheckBox, Input } from "react-native-elements";
 
-import { getOrCreateWebSocketClient } from "@mattermost/react-native-network-client";
+import { getOrCreateWebSocketClient } from "@philippeweidmann/react-native-network-client";
 
 import AddHeaders from "../components/AddHeaders";
 import P12Inputs from "../components/P12Inputs";
@@ -17,7 +17,7 @@ import {
     webSocketClientErrorEventHandler,
 } from "../utils";
 
-import type { WebSocketClientConfiguration } from "@mattermost/react-native-network-client";
+import type { WebSocketClientConfiguration } from "@philippeweidmann/react-native-network-client";
 
 const styles = StyleSheet.create({
     checkboxText: { flex: 1 },

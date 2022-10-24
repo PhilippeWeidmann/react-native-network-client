@@ -12,7 +12,7 @@ import type {
     ProgressPromise,
     RequestOptions,
     UploadRequestOptions,
-} from "@mattermost/react-native-network-client";
+} from "@philippeweidmann/react-native-network-client";
 
 const DEFAULT_CHANNEL_ID = "4dtzmswn93f68fkd97eeafm6xc";
 

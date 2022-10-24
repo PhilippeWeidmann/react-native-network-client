@@ -6,7 +6,7 @@ import { useEffect } from "react";
 import { SafeAreaView, ScrollView } from "react-native";
 import { Button, Input, Text } from "react-native-elements";
 
-import type { WebSocketEvent } from "@mattermost/react-native-network-client";
+import type { WebSocketEvent } from "@philippeweidmann/react-native-network-client";
 
 export default function WebSocketClientScreen({
     route,

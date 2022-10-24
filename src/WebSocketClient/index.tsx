@@ -12,7 +12,7 @@ import type {
     WebSocketEvent,
     WebSocketEventHandler,
     WebSocketReadyState,
-} from "@mattermost/react-native-network-client";
+} from "@philippeweidmann/react-native-network-client";
 
 const { WebSocketClient: NativeWebSocketClient } = NativeModules;
 const Emitter = new NativeEventEmitter(NativeWebSocketClient);

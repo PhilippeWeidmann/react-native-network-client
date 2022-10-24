@@ -11,7 +11,7 @@ import type {
     GenericClientInterface,
     ClientResponse,
     RequestOptions,
-} from "@mattermost/react-native-network-client";
+} from "@philippeweidmann/react-native-network-client";
 
 /**
  * Generic client for making requests
