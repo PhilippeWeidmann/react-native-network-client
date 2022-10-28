@@ -73,7 +73,9 @@ extension NetworkClient {
 
         let request = session.request(url, method: method, parameters: parameters, encoder: encoder, headers: headers, requestModifier: requestModifer)
             
-        request.validate(statusCode: 200...409)
+        let rangeWithoutUnauthorized = 200...409
+        let arrayWithoutUnauthorized = rangeWithoutUnauthorized.filter({$0 != 401})
+        request.validate(statusCode: arrayWithoutUnauthorized)
             .responseJSON { json in
                 self.handleResponse(for: session, withUrl: url, withData: json)
                 self.resolveOrRejectJSONResponse(json, for: request, withResolver: resolve, withRejecter: reject)
@@ -212,7 +214,8 @@ extension NetworkClient {
         
         var apiToken: ApiToken?
         if let tokenData = apiTokenJson?.data(using: .utf8),
-           let jsApiToken = try? JSONDecoder().decode(ApiToken.self, from: tokenData) {
+           let jsApiToken = try? jsonDecoder.decode(ApiToken.self, from: tokenData) {
+            KeychainHelper.deleteToken()
             KeychainHelper.storeToken(jsApiToken)
             apiToken = jsApiToken
             print("Token loaded from JS")

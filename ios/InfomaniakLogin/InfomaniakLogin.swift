@@ -77,7 +77,9 @@ public class InfomaniakLogin {
     private var webviewTimeOutMessage: String?
 
     private init() {
-        // Singleton
+        loginBaseUrl = Constants.LOGIN_URL
+        clientId = "20af5539-a4fb-421c-b45a-f43af3d90c14"
+        redirectUri = "\(Bundle.main.bundleIdentifier ?? "")://oauth2redirect"
     }
 
     public static func initWith(clientId: String,
