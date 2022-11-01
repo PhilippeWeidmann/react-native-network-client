@@ -81,11 +81,11 @@ internal class NetworkClient(private val baseUrl: HttpUrl? = null, options: Read
         val handshakeCertificates = buildHandshakeCertificates()
         if (handshakeCertificates != null) {
             okHttpClient = okHttpClient.newBuilder()
-                    .sslSocketFactory(
-                            handshakeCertificates.sslSocketFactory(),
-                            handshakeCertificates.trustManager
-                    )
-                    .build()
+                .sslSocketFactory(
+                    handshakeCertificates.sslSocketFactory(),
+                    handshakeCertificates.trustManager
+                )
+                .build()
         }
     }
 
@@ -153,9 +153,9 @@ internal class NetworkClient(private val baseUrl: HttpUrl? = null, options: Read
 
     fun adaptRCTRequest(request: Request): Call {
         val newRequest = request
-                .newBuilder()
-                .applyHeaders(clientHeaders)
-                .build()
+            .newBuilder()
+            .applyHeaders(clientHeaders)
+            .build()
 
         return okHttpClient.newCall(newRequest)
     }
@@ -234,9 +234,9 @@ internal class NetworkClient(private val baseUrl: HttpUrl? = null, options: Read
 
     fun createWebSocket() {
         val request = Request.Builder()
-                .url(webSocketUri.toString())
-                .applyHeaders(clientHeaders)
-                .build()
+            .url(webSocketUri.toString())
+            .applyHeaders(clientHeaders)
+            .build()
         val listener = WebSocketEventListener(webSocketUri!!)
 
         webSocket = okHttpClient.newWebSocket(request, listener)
@@ -274,8 +274,8 @@ internal class NetworkClient(private val baseUrl: HttpUrl? = null, options: Read
         val handshakeCertificates = buildHandshakeCertificates(options)
         if (handshakeCertificates != null) {
             builder.sslSocketFactory(
-                    handshakeCertificates.sslSocketFactory(),
-                    handshakeCertificates.trustManager
+                handshakeCertificates.sslSocketFactory(),
+                handshakeCertificates.trustManager
             )
         }
 
@@ -302,11 +302,11 @@ internal class NetworkClient(private val baseUrl: HttpUrl? = null, options: Read
 
     private fun buildRequest(method: String, endpoint: String, headers: ReadableMap?, body: RequestBody?): Request {
         return Request.Builder()
-                .url(composeEndpointUrl(endpoint))
-                .applyHeaders(clientHeaders)
-                .applyHeaders(headers)
-                .method(method.toUpperCase(Locale.ENGLISH), body)
-                .build()
+            .url(composeEndpointUrl(endpoint))
+            .applyHeaders(clientHeaders)
+            .applyHeaders(headers)
+            .method(method.toUpperCase(Locale.ENGLISH), body)
+            .build()
     }
 
     private fun buildMultipartBody(uri: Uri, fileBody: RequestBody, multipartOptions: ReadableMap): RequestBody {
@@ -329,7 +329,7 @@ internal class NetworkClient(private val baseUrl: HttpUrl? = null, options: Read
         return multipartBody.build()
     }
 
-    private fun composeEndpointUrl(endpoint: String) : String {
+    private fun composeEndpointUrl(endpoint: String): String {
         if (baseUrl == null) {
             return endpoint
         }
@@ -337,8 +337,8 @@ internal class NetworkClient(private val baseUrl: HttpUrl? = null, options: Read
         var subpath = if (baseUrl.pathSegments.size > 0) baseUrl.pathSegments.joinToString("/") else ""
 
         return baseUrl
-                .newBuilder(subpath + endpoint)?.build()
-                .toString()
+            .newBuilder(subpath + endpoint)?.build()
+            .toString()
     }
 
     private fun setClientHeaders(options: ReadableMap?) {
@@ -366,12 +366,14 @@ internal class NetworkClient(private val baseUrl: HttpUrl? = null, options: Read
             if (options.hasKey("sessionConfiguration")) {
                 val sessionConfiguration = options.getMap("sessionConfiguration")!!
                 if (sessionConfiguration.hasKey("trustSelfSignedServerCertificate") &&
-                        sessionConfiguration.getBoolean("trustSelfSignedServerCertificate")) {
+                    sessionConfiguration.getBoolean("trustSelfSignedServerCertificate")
+                ) {
                     trustSelfSignedServerCertificate = true
                     builder.hostnameVerifier { _, _ -> true }
                 }
             } else if (options.hasKey("trustSelfSignedServerCertificate") &&
-                    options.getBoolean("trustSelfSignedServerCertificate")) {
+                options.getBoolean("trustSelfSignedServerCertificate")
+            ) {
                 trustSelfSignedServerCertificate = true
                 builder.hostnameVerifier { _, _ -> true }
             }
@@ -409,7 +411,7 @@ internal class NetworkClient(private val baseUrl: HttpUrl? = null, options: Read
             return null
 
         val builder = HandshakeCertificates.Builder()
-                .addPlatformTrustedCertificates()
+            .addPlatformTrustedCertificates()
 
         if (trustSelfSignedServerCertificate) {
             builder.addInsecureHost(baseUrl.host)
@@ -461,13 +463,13 @@ internal class NetworkClient(private val baseUrl: HttpUrl? = null, options: Read
             return null
 
         val retryConfig = options.getMap("retryPolicyConfiguration")
-                ?: return null
+            ?: return null
 
         if (!retryConfig.hasKey("type"))
             return null
 
         val retryType = RetryTypes.values().find { r -> r.type == retryConfig.getString("type") }
-                ?: return null
+            ?: return null
 
         var retryLimit = RetryInterceptor.defaultRetryLimit
         if (retryConfig.hasKey("retryLimit")) {
@@ -479,9 +481,9 @@ internal class NetworkClient(private val baseUrl: HttpUrl? = null, options: Read
             retryMethods = setOf(request.method.toUpperCase(Locale.ENGLISH))
         } else if (retryConfig.hasKey("retryMethods")) {
             retryMethods = retryConfig.getArray("retryMethods")!!
-                    .toArrayList()
-                    .map { (it as String).toUpperCase(Locale.ENGLISH) }
-                    .toSet()
+                .toArrayList()
+                .map { (it as String).toUpperCase(Locale.ENGLISH) }
+                .toSet()
         }
 
         var retryStatusCodes = RetryInterceptor.defaultRetryStatusCodes
