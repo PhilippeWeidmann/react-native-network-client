@@ -1,8 +1,11 @@
 package com.mattermost.networkclient
 
 import android.net.Uri
+import android.util.Log
 import android.webkit.CookieManager
 import com.facebook.react.bridge.*
+import com.google.gson.Gson
+import com.infomaniak.*
 import com.mattermost.networkclient.enums.APIClientEvents
 import com.mattermost.networkclient.enums.RetryTypes
 import com.mattermost.networkclient.helpers.DocumentHelper
@@ -25,6 +28,7 @@ import kotlin.reflect.KProperty
 
 
 internal class NetworkClient(private val baseUrl: HttpUrl? = null, options: ReadableMap? = null, cookieJar: CookieJar? = null) {
+    private val tokenInterceptorListener = tokenInterceptorListener()
     var okHttpClient: OkHttpClient
     private var webSocketUri: URI? = null
     var webSocket: WebSocket? = null
@@ -50,6 +54,20 @@ internal class NetworkClient(private val baseUrl: HttpUrl? = null, options: Read
 
         operator fun setValue(response: Response, property: KProperty<*>, value: Boolean?) {
             requestRetriesExhausted[response] = value
+        }
+    }
+
+    private fun tokenInterceptorListener() = object : TokenInterceptorListener {
+        override suspend fun onRefreshTokenSuccess(apiToken: ApiToken) {
+            KeychainHelper.saveToken(apiToken)
+        }
+
+        override suspend fun onRefreshTokenError() {
+
+        }
+
+        override suspend fun getApiToken(): ApiToken {
+            return KeychainHelper.getSavedToken()!!
         }
     }
 
@@ -266,10 +284,38 @@ internal class NetworkClient(private val baseUrl: HttpUrl? = null, options: Read
         builder.addInterceptor(RuntimeInterceptor(this, "retry"))
         builder.addInterceptor(RuntimeInterceptor(this, "timeout"))
 
-        val bearerTokenInterceptor = getBearerTokenInterceptor(options)
-        if (bearerTokenInterceptor != null) {
-            builder.addInterceptor(bearerTokenInterceptor)
-        }
+        val apiTokenJson = options?.getMap("sessionConfiguration")?.getString("apiToken")
+        val shouldRetrieveToken = options?.getMap("sessionConfiguration")?.getBoolean("shouldRetrieveToken") == true
+
+            var apiToken: ApiToken? = null
+            apiTokenJson?.let {
+                val jsApiToken = Gson().fromJson(apiTokenJson, ApiToken::class.java)
+                jsApiToken?.let {
+                    // Only one user can be logged in the app
+                    KeychainHelper.deleteToken()
+                    KeychainHelper.saveToken(it)
+                    apiToken = it
+                    Log.d("[Infomaniak Login]", "Token loaded from JS")
+                }
+            }
+
+            if (apiToken == null && shouldRetrieveToken) {
+                KeychainHelper.getSavedToken().let {
+                    apiToken = it
+                    Log.d("[Infomaniak Login]", "Token loaded from Keychain")
+                }
+            }
+
+            if (apiToken == null) {
+                Log.d("[Infomaniak Login]", "No token")
+            }
+
+            apiToken?.let {
+                builder.apply {
+                    addInterceptor(TokenInterceptor(tokenInterceptorListener))
+                    authenticator(TokenAuthenticator(tokenInterceptorListener))
+                }
+            }
 
         val handshakeCertificates = buildHandshakeCertificates(options)
         if (handshakeCertificates != null) {
