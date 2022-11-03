@@ -56,7 +56,7 @@ protocol NetworkClient {
 }
 
 extension NetworkClient {
-    func handleRequest(for urlString: String, withMethod method: HTTPMethod, withSession session: Session, withOptions options: JSON, withResolver resolve: @escaping RCTPromiseResolveBlock, withRejecter reject: @escaping RCTPromiseRejectBlock) -> Void {
+    func handleRequest(for urlString: String, withMethod method: HTTPMethod, withSession session: Session, withOptions options: JSON, withResolver resolve: @escaping RCTPromiseResolveBlock, withRejecter reject: @escaping RCTPromiseRejectBlock) {
         guard let url = URL(string: urlString) else {
             rejectMalformed(url: urlString, withRejecter: reject)
             return
@@ -65,7 +65,7 @@ extension NetworkClient {
         handleRequest(for: url, withMethod: method, withSession: session, withOptions: options, withResolver: resolve, withRejecter: reject)
     }
     
-    func handleRequest(for url: URL, withMethod method: HTTPMethod, withSession session: Session, withOptions options: JSON, withResolver resolve: @escaping RCTPromiseResolveBlock, withRejecter reject: @escaping RCTPromiseRejectBlock) -> Void {
+    func handleRequest(for url: URL, withMethod method: HTTPMethod, withSession session: Session, withOptions options: JSON, withResolver resolve: @escaping RCTPromiseResolveBlock, withRejecter reject: @escaping RCTPromiseRejectBlock) {
         let parameters = options["body"] == JSON.null ? nil : options["body"]
         let encoder: ParameterEncoder = parameters != nil ? JSONParameterEncoder.default : URLEncodedFormParameterEncoder.default
         let headers = getHTTPHeaders(from: options)
@@ -73,28 +73,28 @@ extension NetworkClient {
 
         let request = session.request(url, method: method, parameters: parameters, encoder: encoder, headers: headers, requestModifier: requestModifer)
             
-        let rangeWithoutUnauthorized = 200...409
-        let arrayWithoutUnauthorized = rangeWithoutUnauthorized.filter({$0 != 401})
+        let rangeWithoutUnauthorized = 200 ... 409
+        let arrayWithoutUnauthorized = rangeWithoutUnauthorized.filter { $0 != 401 }
         request.validate(statusCode: arrayWithoutUnauthorized)
             .responseJSON { json in
                 self.handleResponse(for: session, withUrl: url, withData: json)
                 self.resolveOrRejectJSONResponse(json, for: request, withResolver: resolve, withRejecter: reject)
-        }
+            }
     }
     
-    func handleResponse(for session: Session, withUrl url: URL, withData data: AFDataResponse<Any>) -> Void {}
+    func handleResponse(for session: Session, withUrl url: URL, withData data: AFDataResponse<Any>) {}
     
     func resolveOrRejectDownloadResponse(_ data: AFDownloadResponse<URL>,
                                          for request: Request? = nil,
                                          withResolver resolve: @escaping RCTPromiseResolveBlock,
-                                         withRejecter reject: @escaping RCTPromiseRejectBlock) -> Void {
+                                         withRejecter reject: @escaping RCTPromiseRejectBlock) {
         data.request?.removeRetryPolicy()
         var responseHeaders = data.response?.allHeaderFields ?? [:]
         if let authorizationHeader = request?.request?.allHTTPHeaderFields?["Authorization"] {
             responseHeaders["token"] = authorizationHeader
         }
         
-        switch (data.result) {
+        switch data.result {
         case .success:
             var ok = false
             if let statusCode = data.response?.statusCode {
@@ -124,7 +124,7 @@ extension NetworkClient {
                 "ok": false,
                 "headers": responseHeaders as Any,
                 "code": responseCode as Any,
-                "retriesExhausted": retriesExhausted
+                "retriesExhausted": retriesExhausted,
             ]
             if let redirectUrls = getRedirectUrls(for: request!) {
                 response["redirectUrls"] = redirectUrls
@@ -149,7 +149,7 @@ extension NetworkClient {
             responseHeaders["token"] = authorizationHeader
         }
         
-        switch (json.result) {
+        switch json.result {
         case .success:
             var ok = false
             if let statusCode = json.response?.statusCode {
@@ -180,7 +180,7 @@ extension NetworkClient {
                 "headers": responseHeaders,
                 "data": json.value,
                 "code": responseCode,
-                "retriesExhausted": retriesExhausted
+                "retriesExhausted": retriesExhausted,
             ]
             if let redirectUrls = getRedirectUrls(for: request!) {
                 response["redirectUrls"] = redirectUrls
@@ -195,7 +195,7 @@ extension NetworkClient {
         }
     }
     
-    func rejectMalformed(url: String, withRejecter reject: @escaping RCTPromiseRejectBlock) -> Void {
+    func rejectMalformed(url: String, withRejecter reject: @escaping RCTPromiseRejectBlock) {
         let message = "Malformed URL: \(url)"
         let error = NSError(domain: NSURLErrorDomain, code: NSURLErrorBadURL, userInfo: [NSLocalizedDescriptionKey: message])
         reject("\(error.code)", message, error)
@@ -241,15 +241,15 @@ extension NetworkClient {
             if let request = request {
                 retryableHTTPMethods = [request.method!]
             } else if let methodsArray = configuration["retryMethods"].array {
-                retryableHTTPMethods = Set(methodsArray.map { (method) -> HTTPMethod in
-                    return HTTPMethod(rawValue: method.stringValue.uppercased())
+                retryableHTTPMethods = Set(methodsArray.map { method -> HTTPMethod in
+                    HTTPMethod(rawValue: method.stringValue.uppercased())
                 })
             }
         
             var retryableHTTPStatusCodes = RetryPolicy.defaultRetryableHTTPStatusCodes
             if let statusCodesArray = configuration["statusCodes"].array {
-                retryableHTTPStatusCodes = Set(statusCodesArray.map { (statusCode) -> Int in
-                    return Int(statusCode.intValue)
+                retryableHTTPStatusCodes = Set(statusCodesArray.map { statusCode -> Int in
+                    Int(statusCode.intValue)
                 })
             }
         
