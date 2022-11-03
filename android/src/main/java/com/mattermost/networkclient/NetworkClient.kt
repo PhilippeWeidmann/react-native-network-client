@@ -4,6 +4,7 @@ import android.net.Uri
 import android.util.Log
 import android.webkit.CookieManager
 import com.facebook.react.bridge.*
+import com.facebook.stetho.okhttp3.StethoInterceptor
 import com.google.gson.Gson
 import com.infomaniak.*
 import com.mattermost.networkclient.enums.APIClientEvents
@@ -283,39 +284,42 @@ internal class NetworkClient(private val baseUrl: HttpUrl? = null, options: Read
         builder.retryOnConnectionFailure(true)
         builder.addInterceptor(RuntimeInterceptor(this, "retry"))
         builder.addInterceptor(RuntimeInterceptor(this, "timeout"))
+        builder.apply {
+            if (BuildConfig.DEBUG) addNetworkInterceptor(StethoInterceptor())
+        }
 
         val apiTokenJson = options?.getMap("sessionConfiguration")?.getString("apiToken")
         val shouldRetrieveToken = options?.getMap("sessionConfiguration")?.getBoolean("shouldRetrieveToken") == true
 
-            var apiToken: ApiToken? = null
-            apiTokenJson?.let {
-                val jsApiToken = Gson().fromJson(apiTokenJson, ApiToken::class.java)
-                jsApiToken?.let {
-                    // Only one user can be logged in the app
-                    KeychainHelper.deleteToken()
-                    KeychainHelper.saveToken(it)
-                    apiToken = it
-                    Log.d("[Infomaniak Login]", "Token loaded from JS")
-                }
+        var apiToken: ApiToken? = null
+        apiTokenJson?.let {
+            val jsApiToken = Gson().fromJson(apiTokenJson, ApiToken::class.java)
+            jsApiToken?.let {
+                // Only one user can be logged in the app
+                KeychainHelper.deleteToken()
+                KeychainHelper.saveToken(it)
+                apiToken = it
+                Log.d("[Infomaniak Login]", "Token loaded from JS")
             }
+        }
 
-            if (apiToken == null && shouldRetrieveToken) {
-                KeychainHelper.getSavedToken().let {
-                    apiToken = it
-                    Log.d("[Infomaniak Login]", "Token loaded from Keychain")
-                }
+        if (apiToken == null && shouldRetrieveToken) {
+            KeychainHelper.getSavedToken().let {
+                apiToken = it
+                Log.d("[Infomaniak Login]", "Token loaded from Keychain")
             }
+        }
 
-            if (apiToken == null) {
-                Log.d("[Infomaniak Login]", "No token")
-            }
+        if (apiToken == null) {
+            Log.d("[Infomaniak Login]", "No token")
+        }
 
-            apiToken?.let {
-                builder.apply {
-                    addInterceptor(TokenInterceptor(tokenInterceptorListener))
-                    authenticator(TokenAuthenticator(tokenInterceptorListener))
-                }
+        apiToken?.let {
+            builder.apply {
+                addInterceptor(TokenInterceptor(tokenInterceptorListener))
+                authenticator(TokenAuthenticator(tokenInterceptorListener))
             }
+        }
 
         val handshakeCertificates = buildHandshakeCertificates(options)
         if (handshakeCertificates != null) {
