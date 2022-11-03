@@ -90,15 +90,17 @@ extension NetworkClient {
                                          withRejecter reject: @escaping RCTPromiseRejectBlock) {
         data.request?.removeRetryPolicy()
         var responseHeaders = data.response?.allHeaderFields ?? [:]
-        if let authorizationHeader = request?.request?.allHTTPHeaderFields?["Authorization"] {
-            responseHeaders["token"] = authorizationHeader
-        }
         
         switch data.result {
         case .success:
             var ok = false
             if let statusCode = data.response?.statusCode {
                 ok = (200 ... 299).contains(statusCode)
+            }
+            
+            if ok,
+               let authorizationHeader = data.request?.allHTTPHeaderFields?["Authorization"] {
+                responseHeaders["token"] = authorizationHeader.replacingOccurrences(of: "Bearer ", with: "").replacingOccurrences(of: "bearer ", with: "")
             }
             
             var response: [String: Any] = [
@@ -145,15 +147,17 @@ extension NetworkClient {
                                      withRejecter reject: @escaping RCTPromiseRejectBlock) {
         json.request?.removeRetryPolicy()
         var responseHeaders = json.response?.allHeaderFields ?? [:]
-        if let authorizationHeader = request?.request?.allHTTPHeaderFields?["Authorization"] {
-            responseHeaders["token"] = authorizationHeader
-        }
         
         switch json.result {
         case .success:
             var ok = false
             if let statusCode = json.response?.statusCode {
                 ok = (200 ... 299).contains(statusCode)
+            }
+            
+            if ok,
+               let authorizationHeader = json.request?.allHTTPHeaderFields?["Authorization"] {
+                responseHeaders["token"] = authorizationHeader.replacingOccurrences(of: "Bearer ", with: "").replacingOccurrences(of: "bearer ", with: "")
             }
 
             var response = [
