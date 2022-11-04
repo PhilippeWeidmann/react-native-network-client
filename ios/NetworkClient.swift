@@ -232,7 +232,7 @@ extension NetworkClient {
         }
         
         if let apiToken = apiToken {
-            interceptors.append(AuthenticationInterceptor(authenticator: OAuthAuthenticator(), credential: apiToken))
+            interceptors.append(AuthenticationInterceptor(authenticator: SyncedAuthenticator(), credential: apiToken))
         }
     
         return Interceptor(adapters: adapters, retriers: retriers, interceptors: interceptors)
