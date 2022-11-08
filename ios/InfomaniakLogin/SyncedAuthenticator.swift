@@ -19,7 +19,7 @@ class SyncedAuthenticator: Authenticator {
         SyncedAuthenticator.refreshTokenLockedQueue.async {
             // Maybe someone else refreshed our token
             if let token = KeychainHelper.getSavedToken(),
-               token.expirationDate >= credential.expirationDate && !token.requiresRefresh {
+               token.expirationDate >= credential.expirationDate && token.accessToken != credential.accessToken {
                 completion(.success(token))
                 return
             }
