@@ -36,10 +36,16 @@ object KeychainHelper {
     }
 
     fun saveToken(apiToken: ApiToken) {
-        val tokenJson = jsonCoder.toJson(apiToken)
-        encryptedSharedPreferences
-            .edit()
-            .putString(TOKEN_KEY, tokenJson)
-            .apply()
+        if (apiToken.expiresAt == 0L) {
+            apiToken.expiresAt = System.currentTimeMillis() + (apiToken.expiresIn * 1000)
+        }
+        // Save token only if it's more recent
+        if ((getSavedToken()?.expiresAt ?: 0) <= apiToken.expiresAt) {
+            val tokenJson = jsonCoder.toJson(apiToken)
+            encryptedSharedPreferences
+                .edit()
+                .putString(TOKEN_KEY, tokenJson)
+                .apply()
+        }
     }
 }

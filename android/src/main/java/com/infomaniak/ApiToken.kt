@@ -9,5 +9,5 @@ data class ApiToken(
     @SerializedName("expires_in") val expiresIn: Int = 7200,
     @SerializedName("user_id") val userId: Int,
     @SerializedName("scope") val scope: String? = null,
-    var expiresAt: Long?
+    var expiresAt: Long
 )
