@@ -98,7 +98,7 @@ public class KeychainHelper: NSObject {
         if let savedToken = getSavedToken() {
             keychainQueue.sync {
                 // Save token only if it's more recent
-                if savedToken.expirationDate <= token.expirationDate {
+                if savedToken.expirationDate < token.expirationDate {
                     let queryUpdate: [String: Any] = [
                         kSecClass as String: kSecClassGenericPassword,
                         kSecAttrService as String: apiTokenKey,

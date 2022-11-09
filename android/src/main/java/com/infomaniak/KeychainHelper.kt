@@ -40,7 +40,7 @@ object KeychainHelper {
             apiToken.expiresAt = System.currentTimeMillis() + (apiToken.expiresIn * 1000)
         }
         // Save token only if it's more recent
-        if ((getSavedToken()?.expiresAt ?: 0) <= apiToken.expiresAt) {
+        if ((getSavedToken()?.expiresAt ?: 0) < apiToken.expiresAt) {
             val tokenJson = jsonCoder.toJson(apiToken)
             encryptedSharedPreferences
                 .edit()
