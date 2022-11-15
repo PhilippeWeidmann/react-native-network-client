@@ -81,8 +81,4 @@ object ApiController {
     }
 
     class RefreshTokenException : Exception()
-
-    enum class ApiMethod {
-        GET, PUT, POST, DELETE, PATCH
-    }
 }

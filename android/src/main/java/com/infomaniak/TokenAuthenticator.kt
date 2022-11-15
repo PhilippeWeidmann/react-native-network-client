@@ -17,14 +17,17 @@ class TokenAuthenticator(
         return runBlocking(Dispatchers.IO) {
             mutex.withLock {
                 val request = response.request
-                val authorization = request.header("Authorization")
-                var apiToken = tokenInterceptorListener.getApiToken()
+                var keychainToken = tokenInterceptorListener.getApiToken()
 
-                if (apiToken.accessToken != authorization?.replaceFirst("Bearer ", "")) {
-                    return@runBlocking changeAccessToken(request, apiToken)
+                if (keychainToken.expiresAt > currentToken?.expiresAt ?: 0) {
+                    return@runBlocking changeAccessToken(request, keychainToken)
                 } else {
-                    apiToken = ApiController.refreshToken(apiToken.refreshToken, tokenInterceptorListener)
-                    return@runBlocking changeAccessToken(request, apiToken)
+                    try {
+                        keychainToken = ApiController.refreshToken(keychainToken.refreshToken, tokenInterceptorListener)
+                        return@runBlocking changeAccessToken(request, keychainToken)
+                    } catch (exception: ApiController.RefreshTokenException) {
+                        return@runBlocking request
+                    }
                 }
             }
         }
@@ -32,10 +35,12 @@ class TokenAuthenticator(
 
     companion object {
         val mutex = Mutex()
+        var currentToken: ApiToken? = null
 
         fun changeAccessToken(request: Request, apiToken: ApiToken): Request {
             val builder = request.newBuilder()
             builder.header("Authorization", "Bearer ${apiToken.accessToken}")
+            currentToken = apiToken
             return builder.build()
         }
     }
